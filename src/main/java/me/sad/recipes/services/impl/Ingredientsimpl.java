@@ -1,25 +1,27 @@
 package me.sad.recipes.services.impl;
 import me.sad.recipes.model.Ingredient;
+import me.sad.recipes.services.ServiceIngredients;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
+
 @Service
-public class Ingredientsimpl {
+public class Ingredientsimpl implements ServiceIngredients {
     private static Map<Long, Ingredient> ingredients = new HashMap<>();
     private static long count = 0;
 
-    public void addIngredients (Ingredient ingredient){
-        Map<Long, Ingredient> addIngridients = ingredients.getOrDefault(count,new LinkedHashMap<>());
-        ingredients.put(count++,ingredient);
+
+    @Override
+    public void addIngredients(Ingredient ingredient) {
+        ingredients.put(count++, ingredient);
     }
 
-    public long getIngredients (Long count){
-        for (Long : ingredients.keySet()) {
-
-        }
+    @Override
+    public Ingredient getIngredients(long count) {
+        return ingredients.get(count);
     }
 
 }
+
+
