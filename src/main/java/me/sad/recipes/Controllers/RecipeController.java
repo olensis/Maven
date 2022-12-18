@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/Recipei")
 public class RecipeController {
     private Recipeimpl recipeimpl;
 
@@ -21,7 +22,7 @@ public class RecipeController {
         return ResponseEntity.ok(recipe);
     }
 
-    @GetMapping("get")
+    @GetMapping()
     public ResponseEntity getRecipe(@RequestParam int count) {
         Recipe recipe = recipeimpl.getRecipe(count);
         if (recipe == null) {

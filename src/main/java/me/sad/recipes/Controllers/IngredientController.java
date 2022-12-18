@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/Ingredient")
 public class IngredientController {
     private ServiceIngredients serviceIngredients;
 
@@ -17,7 +18,7 @@ public class IngredientController {
         serviceIngredients.addIngredients(ingredient);
         return ResponseEntity.ok(ingredient);
     }
-    @GetMapping("get")
+    @GetMapping()
     public ResponseEntity getIngredient(@RequestParam int count) {
         Ingredient ingredient = serviceIngredients.getIngredients(count);
         if (ingredient == null) {
