@@ -9,9 +9,8 @@ public class Recipeimpl implements ServiceRecipe {
     private static long count = 0;
 
     @Override
-    public long addRecipei(Recipe recipe) {
-        recipes.put(count, recipe);
-        return count++;
+    public void addRecipei(Recipe recipe) {
+        recipes.put(count++, recipe);
     }
     @Override
     public Map<Long, Recipe> editRecipe(long count, Recipe recipe){

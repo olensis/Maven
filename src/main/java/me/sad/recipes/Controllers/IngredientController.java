@@ -1,5 +1,7 @@
 package me.sad.recipes.Controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import me.sad.recipes.model.Ingredient;
 import me.sad.recipes.model.Recipe;
 import me.sad.recipes.services.ServiceIngredients;
@@ -11,6 +13,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/Ingredient")
+@Tag(name = "Ингредиенты", description = "Операции удаления, создания, получения и редактирования ингредиентов ")
 public class IngredientController {
     private ServiceIngredients serviceIngredients;
 
@@ -20,12 +23,14 @@ public class IngredientController {
     }
 
     @PostMapping
+    @Operation(summary = "Операция для создания ингредиента")
     public ResponseEntity<Ingredient> createIngredient(@RequestBody Ingredient ingredient) {
         serviceIngredients.addIngredients(ingredient);
         return ResponseEntity.ok(ingredient);
     }
 
     @GetMapping("/{count}")
+    @Operation(summary = "Операция для получения ингредиента")
     public ResponseEntity<Ingredient> getIngredient(@RequestParam int count) {
         Ingredient ingredient = serviceIngredients.getIngredients(count);
         if (ingredient == null) {
@@ -35,6 +40,7 @@ public class IngredientController {
     }
 
     @PutMapping("/{count}")
+    @Operation(summary = "Операция для редактирования ингредиента")
     public ResponseEntity<Ingredient> editIngredient(@PathVariable long count, @RequestBody Ingredient ingredient) {
         Map<Long, Ingredient> ingredients = serviceIngredients.editIngredient(count, ingredient);
         if (ingredient == null) {
@@ -44,6 +50,7 @@ public class IngredientController {
     }
 
     @DeleteMapping("/{count}")
+    @Operation(summary = "Операция для удаления ингредиента")
     public ResponseEntity<Void> deleteIngredient(@PathVariable long count) {
         if (serviceIngredients.deleteIngredient(count)) {
             return ResponseEntity.ok().build();
