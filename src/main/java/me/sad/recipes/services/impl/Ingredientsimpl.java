@@ -16,6 +16,26 @@ public class Ingredientsimpl implements ServiceIngredients {
     public void addIngredients(Ingredient ingredient) {
         ingredients.put(count++, ingredient);
     }
+    @Override
+    public Map<Long, Ingredient> editIngredient(long count, Ingredient ingredient){
+        for (Ingredient ingredientEdit: ingredients.values()) {
+            if (ingredients.containsKey(count)){
+                ingredients.put(count,ingredient);
+                return ingredients;
+            }
+        }
+        return null;
+    }
+    @Override
+    public boolean deleteIngredient (long count) {
+        for (Ingredient ingredientDelete : ingredients.values()) {
+            if (ingredients.containsKey(count)) {
+                ingredients.remove(count);
+                return true;
+            }
+        }
+        return false;
+    }
 
     @Override
     public Ingredient getIngredients(long count) {
