@@ -1,25 +1,86 @@
 package me.sad.recipes.services.impl;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import me.sad.recipes.model.Ingredient;
-import me.sad.recipes.services.ServiceIngredients;
+import me.sad.recipes.model.Recipe;
+import me.sad.recipes.services.FileServiceIngredient;
+import me.sad.recipes.services.IngredientService;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class Ingredientsimpl implements ServiceIngredients {
+public class Ingredientsimpl implements IngredientService {
     private static Map<Long, Ingredient> ingredients = new HashMap<>();
     private static long count = 0;
+    private final FileServiceIngredient fileServiceIngredient;
+
+    public Ingredientsimpl(FileServiceIngredient fileServiceIngredient) {
+        this.fileServiceIngredient = fileServiceIngredient;
+    }
 
 
     @Override
     public void addIngredients(Ingredient ingredient) {
         ingredients.put(count++, ingredient);
+        saveToFile();
     }
 
     @Override
-    public Ingredient getIngredients(long count) {
+    public Map<Long, Ingredient> editIngredient(Long count, Ingredient ingredient) {
+        for (Ingredient ingredientEdit : ingredients.values()) {
+            if (ingredients.containsKey(count)) {
+                ingredients.put(count, ingredient);
+                saveToFile();
+                return ingredients;
+            }
+        }
+        return null;
+    }
+
+    @PostConstruct
+    private void init(){
+        readFromFile();
+    }
+    @Override
+    public boolean deleteIngredient(Long count) {
+        for (Ingredient ingredientDelete : ingredients.values()) {
+            if (ingredients.containsKey(count)) {
+                ingredients.remove(count);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public Ingredient getIngredients(Long count) {
         return ingredients.get(count);
+    }
+
+    private void saveToFile() {
+        try {
+            String json = new ObjectMapper().writeValueAsString(ingredients);
+            fileServiceIngredient.saveToFile(json);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private void readFromFile() {
+        String json = fileServiceIngredient.readFromFile();
+        try {
+            ingredients = new ObjectMapper().readValue(json, new TypeReference<HashMap<Long, Ingredient>>() {
+            });
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
 }
